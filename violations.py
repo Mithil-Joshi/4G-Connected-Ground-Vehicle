@@ -4,14 +4,14 @@ import sqlite3
 
 class Violations(Resource):
     parser = reqparse.RequestParser()
-    def get(self):
+    def post(self):
         args = request.args
-        name = args.get("name", None)
-        lic = args.get("lic", None)
-        timestamp = args.get("timestamp", None)
-        loc_x = args.get("loc_x", None)
-        loc_y = args.get("loc_y", None)
-#yy
+        name = args.post("name", None)
+        lic = args.post("lic", None)
+        timestamp = args.post("timestamp", None)
+        loc_x = args.post("loc_x", None)
+        loc_y = args.post("loc_y", None)
+
         if loc_x == loc_y ==None:
             return {"message":"Bad Request, no params specified"}, 500
         
@@ -25,7 +25,6 @@ class Violations(Resource):
             return {"message":"An error occured while accessing database"}, 500
         
         
-       # val = res.fetchone()
         connection.commit()
         connection.close()
         '''
