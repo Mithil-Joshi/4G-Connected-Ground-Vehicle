@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Display Table</title>
+
+	<style>
+		*{
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+		input.button {
+			align-self: center;
+		}
+		form{
+			border: 2px solid #333;
+			padding: 8px;
+			background-color: #ebeaea;
+			margin: 2px,30px,10px,30px;
+			text-align: center;
+		}
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			font-family: Arial, sans-serif;
+			font-size: 14px;
+			text-align: center;
+			color: #333;
+			margin-bottom: 30px;
+		}
+		th, td {
+			border: 1px solid #ccc;
+			padding: 8px;
+		}
+		th {
+			background-color: #f2f2f2;
+			font-weight: bold;
+		}
+		tr:nth-child(even) {
+			background-color: #f9f9f9;
+		}
+	</style>
+</head>
+<body>
+	<h2>Add Rows</h2>
+
+	<form method="POST" action="{{ '/add_row' }}">
+		
+		
+		<label for="id">id   :</label>
+		<input type="number" name="id" required><br><br>
+
+		<label for="loc_x">loc_x:</label>
+		<input type="number" name="loc_x" step="0.001" required><br><br>
+
+		<label for="loc_y">loc_y:</label>
+		<input type="number" name="loc_y" step="0.001" required><br><br>
+
+		<label for="speed">speed:</label>
+		<input type="number" name="speed" required><br><br>
+
+		<input class="button" type="submit" value="Add">
+	</form>
+	<br>
+
+
+	<h2>Speed limit table</h2>
+	<table>
+		<tr>
+			<th>id</th>
+			<th>loc_x</th>
+			<th>loc_y</th>
+            <th>speed</th>
+		</tr>
+		{% for row in data %}
+			<tr>
+				<td>{{ row[0] }}</td>
+				<td>{{ row[1] }}</td>
+				<td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+	<br>
+
+
+    <h2>Speed limit violation record</h2>
+	<table>
+		<tr>
+			<th>id</th>
+			<th>Name</th>
+			<th>lic</th>
+			<th>timestamp</th>
+			<th>loc_x</th>
+            <th>loc_y</th>
+		</tr>
+		{% for row in data2 %}
+			<tr>
+				<td>{{ row[0] }}</td>
+				<td>{{ row[1] }}</td>
+				<td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+				<td>{{ row[4] }}</td>
+				<td>{{ row[5] }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+</body>
+</html>
