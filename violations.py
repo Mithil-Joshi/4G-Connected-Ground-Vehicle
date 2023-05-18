@@ -6,6 +6,7 @@ class Violations(Resource):
     parser = reqparse.RequestParser()
     def post(self):
         args = request.args
+        id=args.post("id", None)
         name = args.post("name", None)
         lic = args.post("lic", None)
         timestamp = args.post("timestamp", None)
@@ -20,7 +21,7 @@ class Violations(Resource):
         query = "INSERT INTO violations VALUES (?,?,?,?,?,?)"
 
         try:
-            res = cursor.execute(query, (1,name, lic, timestamp, loc_x, loc_y))
+            res = cursor.execute(query, (id,name, lic, timestamp, loc_x, loc_y))
         except BaseException as msg:
             return {"message":"An error occured while accessing database"}, 500
         
