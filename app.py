@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request,redirect
+from flask import Flask, render_template, request,redirect, jsonify 
 from flask_restful import Api, Resource, reqparse
+#from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 import sqlite3
 from violations import Violations 
 from location import Location
@@ -70,6 +71,25 @@ def display_table():
     conn.close()
     return render_template('table.html', data=data, data2=data2)
 
+@app.route('/table-data')
+def get_table_data():
+    conn = sqlite3.connect('sample.db')  # Update with your SQLite database file name
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM location")  # Update with your table name
+
+    # Fetch all rows from the table
+    rows = cursor.fetchall()
+
+    # Convert rows to a list of lists
+    table_data = [list(row) for row in rows]
+
+    cursor.close()
+    conn.close()
+
+    return render_template('home.html', tableData=table_data)
+
+
+
 @app.route('/add_row', methods=['POST'])
 def add_row():
     id = request.form['id']
@@ -79,6 +99,16 @@ def add_row():
     conn = sqlite3.connect('sample.db')
     cursor = conn.cursor()
     cursor.execute('INSERT INTO location (id,loc_x,loc_y,speed) VALUES (?, ?, ?, ?)', (id, loc_x, loc_y, speed))
+    conn.commit()
+    conn.close()
+    return redirect('/')
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    id = request.form['id']
+    conn = sqlite3.connect('sample.db')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM location WHERE ID = ?;', (id))
     conn.commit()
     conn.close()
     return redirect('/')
