@@ -11,7 +11,7 @@
 		input.button {
 			align-self: center;
 		}
-		form{
+		#add_row_form{
 			border: 2px solid #333;
 			padding: 8px;
 			background-color: #ebeaea;
@@ -43,7 +43,7 @@
 <body>
 	<h2>Add Rows</h2>
 
-	<form method="POST" action="{{ '/add_row' }}">
+	<form id="add_row_form" method="POST" action="{{ '/add_row' }}">
 		
 		
 		<label for="id">id   :</label>
@@ -64,7 +64,10 @@
 
 
 	<h2>Speed limit table</h2>
-	<table>
+	<label for="search">Search coordinates:</label>
+    <input type="text" id="search" placeholder="Enter search term">
+
+    <table id="myTable">
 		<tr>
 			<th>id</th>
 			<th>loc_x</th>
@@ -72,11 +75,17 @@
             <th>speed</th>
 		</tr>
 		{% for row in data %}
-			<tr>
+			<tr id="row-{{ row[0] }}">
 				<td>{{ row[0] }}</td>
 				<td>{{ row[1] }}</td>
 				<td>{{ row[2] }}</td>
                 <td>{{ row[3] }}</td>
+				<td>
+					<form method="POST" action="{{ '/delete' }}">
+						<input type="hidden" name="id" value="{{ row[0] }}">
+						<input type="submit" value="Delete">
+					</form>
+				</td>
 			</tr>
 		{% endfor %}
 	</table>
@@ -84,7 +93,9 @@
 
 
     <h2>Speed limit violation record</h2>
-	<table>
+	<label for="search">Search coordinates:</label>
+    <input type="text" id="search2" placeholder="Enter search lic no or name">
+	<table id="mytable2">
 		<tr>
 			<th>id</th>
 			<th>Name</th>
@@ -104,5 +115,41 @@
 			</tr>
 		{% endfor %}
 	</table>
+	<script>
+		// Enable search functionality in location table
+		const searchInput = document.getElementById('search');
+		searchInput.addEventListener('input', () => {
+		  const searchTerm = searchInput.value.toLowerCase();
+		  const tableRows = document.querySelectorAll('#myTable tr');
+	
+		  for (let i = 1; i < tableRows.length; i++) {
+			const rowData = tableRows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+			const rowData2 = tableRows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
+			if (rowData.includes(searchTerm) || rowData2.includes(searchTerm)) {
+			  tableRows[i].style.display = '';
+			} else {
+			  tableRows[i].style.display = 'none';
+			}
+		  }
+		});
+
+		// Enable search functionality in violation table
+		const searchInput2 = document.getElementById('search2');
+		searchInput2.addEventListener('input', () => {
+		  const searchTerm = searchInput.value.toLowerCase();
+		  const tableRows = document.querySelectorAll('#myTable2 tr');
+	
+		  for (let i = 1; i < tableRows.length; i++) {
+			const rowData = tableRows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+			const rowData2 = tableRows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
+			if (rowData.includes(searchTerm) || rowData2.includes(searchTerm)) {
+			  tableRows[i].style.display = '';
+			} else {
+			  tableRows[i].style.display = 'none';
+			}
+		  }
+		});
+		
+    </script>
 </body>
 </html>
